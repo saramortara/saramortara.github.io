@@ -4,10 +4,14 @@ description: >
     aqui eu compartilho o que apanhei nos últimos anos de R e modelagem estatística.
 
 theme: jekyll-theme-midnight
+permalink: ':title/'
+baseurl: "/blogfresh" # the subpath of your site, e.g. /blog
+url: "https://saramortara.github.io/" # the base hostname & protocol for your site, e.g. http://example.com
+
 
 # Social
-twitter: "@MortaraSara" #Add your Twitter
-github: "@saramortara"
+twitter: #@MortaraSara #Add your Twitter
+github: @saramortara
 
 # Comments
 discus-identifier: jtemporal
