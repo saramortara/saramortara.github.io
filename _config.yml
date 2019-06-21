@@ -1,14 +1,13 @@
 name: paRtilhando códigos de R
 title: uma página por Sara Mortara
+ left:
+    - text: "First Observations"
+      href: praticas/pratica0_introducao_ao_R.html
 description: >
     aqui eu compartilho o que apanhei nos últimos anos de R e modelagem estatística.
 
 theme: jekyll-theme-midnight
-
- left:
-    - text: "First Observations"
-      href: praticas/pratica0_introducao_ao_R.html
-      
+     
 # Social
 twitter: #@MortaraSara #Add your Twitter
 github: @saramortara
