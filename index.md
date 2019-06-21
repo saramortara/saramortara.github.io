@@ -1,37 +1,45 @@
-## Welcome to GitHub Pages
+## um punhado de códigos paRa exploRaR e analisaR dados usando o R 
 
-You can use the [editor on GitHub](https://github.com/saramortara/saramortara.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+Todo o conteúdo desta página foi desenvolvido para a disciplina: "Modelagem estatística em ciências ambientais" ministrada no programa de Ciências Ambientais da Universidade Federal de Alfenas (UNIFAL) em 2018. 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## bases conceituais
 
-### Markdown
+A disciplina visa usar a estatística para como ferramenta para resolver
+problemas em ciências ambientais. A proposta é apresentar conceitos gerais e ferramentas de
+inferência estatística e análise de dados usando modelos estatísticos. O objetivo geral é capacitar
+os alunos em aspectos básicos de modelagem estatística: abordagens de inferência estatística,
+distribuições de probabilidade, modelos de regressão, estimativa de parâmetros usando máxima
+verossimilhança, seleção de modelos e uso do software R. Dessa forma, espera-se que os alunos
+se localizem no mapa conceitual do desenvolvimento de modelos estatísticos para responder
+perguntas em ciências ambientais.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## bibliografia básica
 
-```markdown
-Syntax highlighted code block
+Batista, J.L.F. (2009). Verossimilhança e Máxima Verossimilhança (Apostila). Disponível em:
+http://cmq.esalq.usp.br/BIE5781/lib/exe/fetch.php?media=leituras:verossim.pdf
 
-# Header 1
-## Header 2
-### Header 3
+Bolker, B.M., 2008. Ecological models and data in R. Princeton University Press.
 
-- Bulleted
-- List
+Burnham, K.P. & Anderson, D.R., 2003. Model selection and multimodel inference: a practical
+information-theoretic approach. Springer Science &amp; Business Media.
 
-1. Numbered
-2. List
+Fox, G.A., Negrete-Yankelevich, S. &amp; Sosa, V.J. eds., 2015. Ecological statistics: contemporary
+theory and application. Oxford University Press, USA.
 
-**Bold** and _Italic_ and `Code` text
+Ellison, G.N. & Gotelli, N.J., 2004. A primer of ecological statistics. Sinauer, Sunderland,
+Massachusetts, USA.
 
-[Link](url) and ![Image](src)
-```
+Hilborn, R. & Mangel, M., 1997. The ecological detective: confronting models with data (Vol.
+28). Princeton University Press.
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Johnson, J. B. & Omland, K. S. (2004). Model selection in ecology and evolution. Trends in
+Ecology and Evolution 19:101-108.
 
-### Jekyll Themes
+## bibliografia complementar
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/saramortara/saramortara.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+Cox, D.R. & Donnelly, C.A., 2011. Principles of applied statistics. Cambridge University Press.
+Otto, S. P., &amp; Day, T. (2011). A biologist's guide to mathematical modeling in ecology and
+evolution. Princeton University Press.
 
-### Support or Contact
+Venables, W.N. & Ripley, B.D., 2013. Modern applied statistics with S-PLUS. Springer Science & Business Media.
 
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
