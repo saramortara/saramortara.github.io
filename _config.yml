@@ -11,3 +11,18 @@ github: "@saramortara"
 
 # Comments
 discus-identifier: jtemporal
+
+# Paginate
+paginate: 5
+paginate_path: /page:num/
+
+# Build settings
+markdown: kramdown
+gems:
+  - jekyll-feed
+  - jekyll-paginate
+exclude:
+  - Gemfile
+  - Gemfile.lock
+include: [_pages]
+
