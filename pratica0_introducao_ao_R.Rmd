@@ -41,10 +41,10 @@ Vamos então definir um novo diretório de trabalho. Recomendo que você crie um
 
 **Atenção 2**: o comando abaixo funciona apenas para o computador da Sara. Defina o seu próprio caminho. 
 
-```{r}
+```{r echo=FALSE}
 # use a função setwd para definir o diretório que você irá trabalhar
 # este exemplo, funciona para o meu caso, encontre o caminho que funciona para o seu
-setwd("/home/sara/Dropbox/posdoc/disciplina_modelagem/atividadesR/praticas")
+#setwd("/home/sara/Dropbox/posdoc/disciplina_modelagem/atividadesR/praticas")
 ```
 
 Verifique se a mudança de diretório funcionou usando novamente a função 
@@ -155,7 +155,7 @@ Para ler o arquivo e gravá-lo num objeto vamos usar o comando abaixo:
 
 ```{r}
 # estamos atribuindo ao objeto cax a planilha em csv
-cax = read.csv(file="../dados/exemplo-caixeta.csv")
+cax = read.csv(file="dados/exemplo-caixeta.csv")
 ```
  se você digitar o nome do objeto:
 
@@ -277,7 +277,7 @@ Agora é hora de deixar os caixetais de lado e partir para um outro exemplo. Nes
 Vamos explorar a relação entre o número de espécies de galinhas esféricas em ilhas do mar de Saturno. A pergunta por trás deste exercício é: ilhas maiores sustentam um maior número de espécies de galinhas esféricas?
 
 <center>
-![](../../praticas/figuras/galinhas_esfericas.png){width=90%}</center>
+![](figuras/galinhas_esfericas.png){width=90%}</center>
 
 
 
