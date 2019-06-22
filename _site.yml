@@ -5,6 +5,8 @@ navbar:
   left:
     - text: "home"
       href: index.html
+    - text: "sobre"
+      href: about_me.html
     - text: "tutoriais"
       href: tutoriais.html
     - text: "aulas"

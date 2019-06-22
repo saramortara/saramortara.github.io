@@ -350,14 +350,14 @@ $(document).ready(function () {
 <p>Antes de tudo, vamos checar em qual o diretório o R está aberto usando a função <tt> getwd</tt>:</p>
 <pre class="r"><code># use a função getwd para checar o diretorio de trabalho
 getwd()</code></pre>
-<pre><code>## [1] &quot;/home/sara/saragit/my_page/demo&quot;</code></pre>
+<pre><code>## [1] &quot;/home/sara/saragit/my_page/saramortara.github.io&quot;</code></pre>
 <p>Vamos então definir um novo diretório de trabalho. Recomendo que você crie um diretório chamado ‘atividadesR’ em seu computador, que contenha todos os arquivos e pastas do ‘atividadesR’ no google drive da disciplina. Vamos manter os dados dentro da pasta ‘dados’ nesse mesmo diretório. As atividades da aula teórica estão no diretório ‘teorica’ e as práticas (como esta), no diretório ‘praticas’. Neste momento, vamos trabalhar dentro do diretorio ‘praticas’. Se você já está à vontade com o R e prefere organizar de outra forma, vá em frente! Esta é apenas uma recomendação para que os códigos da aula funcionem diretamente no computador de vocês.</p>
 <p><strong>Atenção 1</strong>: usuários de Linux e Mac devem usar uma barra / para separar os diretórios. Usuários de Windows devem usar a barra invertida \ ou duas barras //.</p>
 <p><strong>Atenção 2</strong>: o comando abaixo funciona apenas para o computador da Sara. Defina o seu próprio caminho.</p>
 <p>Verifique se a mudança de diretório funcionou usando novamente a função <tt> getwd</tt>:</p>
 <pre class="r"><code># use a função getwd para checar o diretorio de trabalho
 getwd()</code></pre>
-<pre><code>## [1] &quot;/home/sara/saragit/my_page/demo&quot;</code></pre>
+<pre><code>## [1] &quot;/home/sara/saragit/my_page/saramortara.github.io&quot;</code></pre>
 <p>Verifique os arquivos que estão no diretório:</p>
 <pre class="r"><code># use a função dir para checar os arquivios que estão no diretorio de trabalho
 dir()</code></pre>
@@ -368,7 +368,7 @@ dir()</code></pre>
 ##  [9] &quot;pratica1_conhecendo_os_dados.Rmd&quot; &quot;pratica2_regressao_linear.Rmd&quot;   
 ## [11] &quot;pratica3_selecao_modelos.Rmd&quot;     &quot;pratica4_glm.Rmd&quot;                
 ## [13] &quot;_site&quot;                            &quot;site_libs&quot;                       
-## [15] &quot;_site.yml&quot;                        &quot;teste.html&quot;                      
+## [15] &quot;_site.yml&quot;                        &quot;teoricas&quot;                        
 ## [17] &quot;tutoriais.Rmd&quot;</code></pre>
 <p>E também verifique se o <em>workspace</em> do R está vazio:</p>
 <pre class="r"><code># para listar os objetos existentes na sua área de trabalho (deve estar vazio)
