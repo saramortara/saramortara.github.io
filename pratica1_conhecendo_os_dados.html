@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Sara Mortara" />
+
+
+<title>Pratica 1: Conhecendo os dados</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">paRtilha de códigos em R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">home</a>
+</li>
+<li>
+  <a href="tutoriais.html">tutoriais</a>
+</li>
+<li>
+  <a href="aulas.html">aulas</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="http://github.com/saramortara">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/MortaraSara">
+    <span class="fa fa-twitter fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Pratica 1: Conhecendo os dados</h1>
+<h4 class="author">Sara Mortara</h4>
+<h4 class="date">3 de dezembro de 2018</h4>
+
+</div>
+
+
+<div id="o-primeiro-passo-da-modelagem-estatistica-e-conhecer-bem-seus-dados" class="section level2">
+<h2>O primeiro passo da modelagem estatística é conhecer bem seus dados</h2>
+<p>Vamos olhar para os parâmetros de média e desvio de diferentes conjuntos de dados e encontrar uma distribuição de probabilidade que melhor descreva os dados.</p>
+<div id="media-de-idade-do-uso-de-fraldas" class="section level3">
+<h3>1. Média de idade do uso de fraldas</h3>
+<p>O crescimento do uso de fraldas despontou na América Latina nos últimos anos. Vamos olhar para a distribuição da idade da população que usa fraldas. Os dados são de uma amostra de 100 indivíduos.</p>
+<p>Os dados estão no arquivo ‘idade_fraldas.csv’ no diretório ‘dados’. Primeiro, defina o diretório de trabalho e leia os dados no R.</p>
+<pre class="r"><code># Lendo o arquivo de dados 
+fraldas &lt;- read.csv(&quot;dados/idade_fraldas.csv&quot;)</code></pre>
+<p>Vamos usar as funções <tt> summary </tt> e <tt> hist </tt> para inspecionar os gráficos.</p>
+<pre class="r"><code># selecionando a coluna &#39;idade&#39; do objeto fraldas
+summary(fraldas$idade)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    0.00    0.00    1.00   16.83    3.00   99.00</code></pre>
+<pre class="r"><code># qual a variancia?
+var(fraldas$idade)</code></pre>
+<pre><code>## [1] 1046.446</code></pre>
+<p>Qual idade média da população amostrada que usa fraldas? Este valor é representativo da distribuição dos dados observados?</p>
+<pre class="r"><code># grafico de boxplot da idade de pessoas que usam fraldas
+hist(fraldas$idade, main=&quot;média=16&quot;, xlab=&quot;Idade (anos)&quot;, ylab=&quot;Frequência&quot;)
+# linha vermelha com o valor médio
+abline(v=mean(fraldas$idade), col=&quot;red&quot;, lwd=2)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Este é um caso específico de uma distribuição bimodal, isto é, uma distribuição com dois picos distintos. Vamos separar em dois grupos, um com os 80 primeiros indivíduos e outro com os 20 demais.</p>
+<pre class="r"><code># selecionando os 80 primeiros valores
+bb &lt;- fraldas$idade[1:80]
+# selecionando os 20 últimos valores
+vv &lt;- fraldas$idade[81:100]</code></pre>
+<p>Vamos visualizar em um histograma a distribuição dos dois conjuntos de dados e suas respectivas médias (linha vermelha).</p>
+<pre class="r"><code># define duas janelas gráficas, com 1 linha e 2 colunas
+par(mfrow=c(1,2))
+# histograma dos 80 individuos crianças
+hist(bb, main=&quot;média=0.8&quot;, xlab=&quot;Crianças&quot;, ylab=&quot;Frequência&quot;)
+abline(v=mean(bb), col=&quot;red&quot;)
+#histograma dos 20 individuos idosos
+hist(vv, main=&quot;média=80&quot;, xlab=&quot;Idosos&quot;, ylab=&quot;Frequência&quot;)
+abline(v=mean(vv), col=&quot;red&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<pre class="r"><code># volta à configuração original de 1 linha e 1 coluna
+par(mfrow=c(1,1))</code></pre>
+<p>Nestes casos, a média parece um indicador melhor da distribuição dos dados dentro de cada conjunto.</p>
+<p>Vamos agora conhecer distribuições mais comuns de dados que iremos usar ao longo da semana e entender quais os parâmetros que as descrevem.</p>
+</div>
+<div id="distribuicoes-de-dados" class="section level3">
+<h3>2. Distribuições de dados</h3>
+<div id="distribuicao-normal" class="section level4">
+<h4>2.1. Distribuição normal</h4>
+A distribuição normal, ou gaussiana é bastante comum, mas lembre-se de que nem tudo na natureza é normal. A distribuição normal é uma distribuição <strong>contínua</strong>. Uma variável <span class="math inline">\({X}\)</span> descrita pela distribuição normal é definida como:
+<center>
+<span class="math inline">\({X \sim N(\mu, \sigma)}\)</span>,
+</center>
+<p>onde <span class="math inline">\(\mu\)</span> é a média da distribuição e <span class="math inline">\(\sigma\)</span> é o desvio padrão. A variância da distribuição normal é <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>Vamos gerar valores aleatórios extraídos de uma distribuição normal com parâmetros <span class="math inline">\(\mu\)</span> e <span class="math inline">\(\sigma\)</span> conhecidos. Para gerar distribuições aleatórias a partir de uma normal, vamos usar a função <tt> rnorm</tt>.</p>
+<p>Primeiro, o vamos criar o que chamamos de distribuição normal padrão: <span class="math inline">\(\mu=0\)</span> e <span class="math inline">\(\sigma=1\)</span>.</p>
+<pre class="r"><code># como estamos gerando distribuições aleatórias, para que todos os computadores gerem os mesmos valores, usamos a função &#39;set.seed&#39; com o mesmo valor
+set.seed(42)
+# usamos a funcao rnorm que recebe: n de observações, a média e o desvio
+norm1 &lt;- rnorm(n=100, mean=0, sd=1)
+hist(norm1, main=expression(paste(lambda,&quot;=0&quot;, &quot;, &quot;, sigma, &quot;=1&quot;, sep=&quot;&quot;)), probability=TRUE)
+abline(v=mean(norm1), col=&quot;red&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Note que mesmo um conjunto de valores extraídos de uma distribição normal, simplesmente devido ao processo de amostragem podem não seguir uma distribuição normal <em>perfeita</em>.</p>
+<p>Vamos ver o que acontece quando aumentamos o tamanho da amostra.</p>
+<pre class="r"><code># usamos a funcao rnorm que recebe: n de observações, a média e o desvio
+norm2 &lt;- rnorm(n=10000, mean=0, sd=1)
+hist(norm2, main=expression(paste(lambda,&quot;=0&quot;, &quot;, &quot;, sigma, &quot;=1&quot;, sep=&quot;&quot;)), probability=TRUE)
+abline(v=mean(norm2), col=&quot;red&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Com o aumento da amostra, podemos ver que a média <span class="math inline">\(\mu\)</span> se aproxima de 0 e a distribuição fica mais simétrica. Use os comandos <tt> mean </tt> e <tt> sd </tt> para comparar os valores da média e desvio padrão dos dois objetos gerados (<tt> norm1 </tt> e <tt> norm2 </tt>).</p>
+<p>Vamos explorar um pouco mais os parâmetros da distribuição normal. Vamos criar dois conjuntos de dados com a mesma média <span class="math inline">\(\mu\)</span> e desvio padrão <span class="math inline">\(\sigma\)</span> diferentes.</p>
+<pre class="r"><code># criando um vetor com uma variável normal de média 0 e desvio 2
+norm3 &lt;- rnorm(100, mean=0, sd=2)
+# criando um vetor com uma variável normal de média 0 e desvio 8
+norm4 &lt;- rnorm(100, mean=0, sd=8) </code></pre>
+<p>Agora vamos visualizar os dados em um histograma de densidade.</p>
+<pre class="r"><code>par(mfrow=c(1,2))
+hist(norm3, main=expression(paste(lambda,&quot;=0&quot;, &quot;, &quot;, sigma, &quot;=2&quot;, sep=&quot;&quot;)), 
+     probability = TRUE, xlim=c(-22,22 ))
+abline(v=mean(norm3), col=&quot;red&quot;)
+hist(norm4, main=expression(paste(lambda,&quot;=0&quot;, &quot;, &quot;, sigma, &quot;=8&quot;, sep=&quot;&quot;)), 
+     probability = TRUE, xlim=c(-22,22))
+abline(v=mean(norm4), col=&quot;red&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Note que, apesar dos dois conjuntos de dados virem de uma distribuição normal com a mesma média, como o desvio padrão é diferente, as distribuições de cada conjunto de dados tem formas bastante distintas.</p>
+<div id="distribuicao-normal-na-natureza" class="section level5">
+<h5>2.1.1 Distribuição normal na natureza</h5>
+<p>A distribuição normal é utilizada para descrever dados contínuos que possuem distribuição simétrica em torno da média, como por exemplo peso de algum organismo, comprimento de ossos, comprimento de flores, etc.</p>
+<p>Vamos olhar para a distribuição de comprimento de pétalas e sépalas de espécies do gênero <em>Iris setosa</em> (Iridaceae) da península de Gaspé (Canadá). Os dados ficaram famosos porque o estatístico Ronald Fisher usou esse conjunto para desenvolver a teoria da análise de discriminantes, mas não foi Fisher quem coletou os dados. Os dados foram coletados por Edgar Anderson em áreas de pastagem na península de Gaspé. Edgar mediu todas as 50 pétalas e sépalas imediatamente após a coleta utilizando o mesmo equipamento. Esse conjunto de dados já existe dentro do R. Para carregar os dados é preciso usar a função <tt>data</tt>. Uma vez carregados os dados, um objeto chamado <tt>iris</tt> é criado em sua área de trabalho.</p>
+<center>
+<img src="figuras/iris.png" style="width:60.0%" />
+</center>
+<pre class="r"><code># carregar os dados das galinhas
+data(&quot;iris&quot;)
+# use o comando ?iris para acessar a página de ajuda do objeto e entender mais sobre os dados</code></pre>
+<p>Use o comando <tt>summary</tt> para entender mais sobre a distribuição das variáveis dentro do objeto <tt>iris</tt></p>
+<pre class="r"><code>summary(iris)</code></pre>
+<pre><code>##   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
+##  Min.   :4.300   Min.   :2.000   Min.   :1.000   Min.   :0.100  
+##  1st Qu.:5.100   1st Qu.:2.800   1st Qu.:1.600   1st Qu.:0.300  
+##  Median :5.800   Median :3.000   Median :4.350   Median :1.300  
+##  Mean   :5.843   Mean   :3.057   Mean   :3.758   Mean   :1.199  
+##  3rd Qu.:6.400   3rd Qu.:3.300   3rd Qu.:5.100   3rd Qu.:1.800  
+##  Max.   :7.900   Max.   :4.400   Max.   :6.900   Max.   :2.500  
+##        Species  
+##  setosa    :50  
+##  versicolor:50  
+##  virginica :50  
+##                 
+##                 
+## </code></pre>
+<p>Vamos selecionar apenas os dados da espécie <em>I. setosa</em> e olhar a distribuição.</p>
+<pre class="r"><code># primeiro criamos um objeto apenas com as observações da espécie I. setosa
+setosa &lt;- iris[iris$Species==&quot;setosa&quot;,]</code></pre>
+<p>Vamos criar um gráfico para criar um histograma de densidade probabilística do comprimento das sépalas e pétalas de <em>I. setosa</em>.</p>
+<pre class="r"><code>par(mfrow=c(1,2))
+hist(setosa$Sepal.Length, probability=TRUE, main=&quot;Comprimento da sépala&quot;)
+hist(setosa$Petal.Length, probability=TRUE, main=&quot;Comprimento da pétala&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))</code></pre>
+<p>Vamos checar o ajuste dos dados à distribuição normal. Antes, vamos calcular a média e desvio padrão dos dados de comprimento de sépala e pétala da <em>I. setosa</em>.</p>
+<pre class="r"><code># primeiro vamos calcular a média e o desvio dos comprimentos da sépala e pétala
+med.sepala &lt;- mean(setosa$Sepal.Length)
+desv.sepala &lt;- sd(setosa$Sepal.Length)
+med.petala &lt;- mean(setosa$Petal.Length)
+desv.petala &lt;- sd(setosa$Petal.Length)</code></pre>
+<p>Agora vamos fazer uma comparação visual do histograma de densidade dos dados com a curva de densidade probabilística estimada a partir de uma distribuição normal com média e desvio iguais aos dados. Ou seja, a curva que irá aparecer no gráfico tem <span class="math inline">\(\mu\)</span> e <span class="math inline">\(\sigma\)</span> iguais aos dados da <em>I. setosa</em>.</p>
+<pre class="r"><code>par(mfrow=c(1,2))
+# comparando o histograma dos dados com uma curva de uma distribuição normal
+## para sepala
+hist(setosa$Sepal.Length, probability = TRUE)
+# a curva normal é gerada com parâmetros de média e desvio igual aos dados de sépala
+curve(dnorm(x, mean=med.sepala, sd=desv.sepala), add=TRUE, col=&quot;blue&quot;)
+## para pétala
+hist(setosa$Petal.Length, probability = TRUE)
+# a curva normal é gerada com parâmetros de média e desvio igual aos dados de pétala
+curve(dnorm(x, mean=med.petala, sd=desv.petala), add=TRUE, col=&quot;blue&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))</code></pre>
+</div>
+</div>
+</div>
+<div id="distribuicao-binomial" class="section level3">
+<h3>2.2. Distribuição binomial</h3>
+<p>A distribuição binomial é uma distribuição de probabilidade <strong>discreta</strong> do número de sucessos em <span class="math inline">\(n\)</span> tentativas independentes. Cada tentativa tem duas possibilidades: sucesso ou fracasso. Uma variável binomial <span class="math inline">\(X\)</span> é definida pelo número de resultados bem sucedidos:</p>
+<center>
+<span class="math inline">\(X \sim Bin(n, p)\)</span>,
+</center>
+<p>onde <span class="math inline">\(n\)</span> é o número de tentativas independentes e a probabilidade de um evento de sucesso é <span class="math inline">\(p\)</span>.</p>
+<p>A média de uma distribuição binomial é definida por <span class="math inline">\(np\)</span> e a variância é definida por <span class="math inline">\(np(1-p)\)</span>. Vamos conhecer melhor a distribuição de probabilidade binomial e seus parâmetros.</p>
+<p>Um exemplo clássico da distribuição binomial é o jogo de moedas. Em uma moeda não viciada, a probabilidade de tirar cara é 0,5. A probabilidade de 0,5 é justamente o parâmetro <span class="math inline">\(p\)</span> da binomial negativa. Em média, se você jogar uma moeda 25 vezes, a probabilidade de tirar cara seria 12,5. O valor de 12,5 é justamente a média de distribuição binomial de probabilidade <span class="math inline">\(p=0,5\)</span> e <span class="math inline">\(n=25\)</span> , definida por <span class="math inline">\(np\)</span>.</p>
+<p>Vamos entender melhor a distribuição binomial simulando valores no R. Primeiro, vamos criar um vetor contendo 1000 valores aleatórios vindos de uma distribuição binomial. O número de tentativas <span class="math inline">\(n\)</span> é igual a 25 e a probabilidade de sucesso de cada tentativa <span class="math inline">\(p\)</span> é 0,5. Em outras palavras, o que estamos tentando encontrar é a probabilidade de 1000 pessoas tirarem caras em uma moeda em 25 tentativas.</p>
+<pre class="r"><code># Criando 1000 valores de uma amostra de 25 com probabilidade 0,5
+bin1 &lt;- rbinom(n=1000, size=25, prob=0.5)</code></pre>
+<p>Vamos olhar a distribuição de probabilidades do vetor <tt>bin1</tt>.</p>
+<pre class="r"><code>par(mfrow=c(1,2))
+hist(bin1, probability=TRUE, main=&quot;n=25, p=0.5&quot;)
+abline(v=mean(bin1), col=&quot;red&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Agora imagine uma moeda viciada, em que a probabilidade de se tirar cara é 0,8. Qual a distribuição de probabilidade de sucesso em 25 tentativas? Vamos criar um vetor com valores aleatórios de uma binomial com <span class="math inline">\(n=25\)</span> e <span class="math inline">\(p=0,8\)</span>.</p>
+<pre class="r"><code># Criando 1000 valores de uma amostra de 25 com probabilidade 0,8
+bin2 &lt;- rbinom(n=1000, size=25, prob=0.8)</code></pre>
+<p>E vamos olhar o histograma de densidade probabilística.</p>
+<pre class="r"><code>hist(bin2, probability=TRUE, main=&quot;n=25, p=0.8&quot;)
+abline(v=mean(bin2), col=&quot;red&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))</code></pre>
+<p>Note que quando <span class="math inline">\(p=0,8\)</span> a distribuição não é simétrica como é quando <span class="math inline">\(p=0,5\)</span>. A média de sucessos agora é maior e o desvio também é maior.</p>
+<p>Calcule o desvio padrão das duas distribuições usando a fórmula <span class="math inline">\(np\)</span> e compare com o valor calculado com a função <tt>sd</tt>.</p>
+<div id="distribuicao-binomial-na-natureza" class="section level4">
+<h4>2.2.1 Distribuição binomial na natureza</h4>
+<p>É muito comum termos uma variável binomial em dados biológicos: presença ou ausência de uma espécie em um dado local, proporção de plantas mortas em um tratamento experimental, proporção de organismos infestados por parasitas, entre outros.</p>
+<p>Vamos tomar como exemplo um peixe da família Characidae <em>Thayeria tapajonica</em> da bacia do Tapajós. A espécie foi descrita recentemente (2017) e se observou uma grande quantidade de peixes infestados por parasitas (ainda desconhecido). Em 50 amostras ao longo do rio Tapajós foram coletados 100 indivíduos de <em>T. tapajonica</em> e contaram quantos destes estavam infestados por parasitas. Os dados estão no arquivo ‘peixes.csv’. Vamos carregá-lo no R e inspecionar a distribuição.</p>
+<center>
+<img src="figuras/Thayeria_tapajonica.jpg" style="width:20.0%" />
+</center>
+<pre class="r"><code>peixes &lt;- read.csv(&quot;dados/peixes.csv&quot;)
+summary(peixes$infestados)</code></pre>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    59.0    66.0    70.0    69.2    71.0    80.0</code></pre>
+<p>Vamos fazer um histograma com essa a coluna ‘infestados’.</p>
+<pre class="r"><code>hist(peixes$infestados, probability = TRUE, main=&quot;média=69&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+<p>Vamos checar o ajuste dos dados à distribuição binomial. Antes, vamos calcular a média e o desvio padrão dos dados e, com isso, os parâmetros <span class="math inline">\(n\)</span> e <span class="math inline">\(p\)</span>.</p>
+<pre class="r"><code># media
+med.peixes &lt;- mean(peixes$infestados)
+# desvio padrao
+desv.peixes &lt;- sd(peixes$infestados)
+# N de tentativas
+n = 100
+# probabilidade de sucesso 
+## se média = n*p; p=média/100 
+prob.obs &lt;- med.peixes/100</code></pre>
+<p>Agora para a comparação visual, vamos comparar os dados com a distribuição binomial com <span class="math inline">\(n\)</span> e <span class="math inline">\(p\)</span> igual aos dados.</p>
+<pre class="r"><code># antes precisamos de um vetor que represente o intervalo de observações
+seq.peixes &lt;- seq(54, 80, 2) 
+hist(peixes$infestados, probability=TRUE, breaks=seq.peixes)
+points(seq.peixes, dbinom(seq.peixes, size = n, prob=prob.obs), col=&quot;blue&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+</div>
+<div id="distribuicao-poisson" class="section level3">
+<h3>2.3. Distribuição Poisson</h3>
+<p>A distribuição Poisson é uma distribuição discreta utilizada para descrever eventos raros que acontecem com uma mesma taxa. A distribuição poisson possui apenas um parâmetro para descrevê-la, <span class="math inline">\(/lamba\)</span>. Uma variâvel poisson é descrita como:</p>
+<center>
+<span class="math inline">\(X \sim P(\lambda)\)</span>,
+</center>
+<p>onde <span class="math inline">\(\lambda\)</span> representa a média e a variância da distribuição.</p>
+<div id="distribuicao-poisson-na-natureza" class="section level4">
+<h4>2.3.1. Distribuição Poisson na natureza</h4>
+<p>A distribuição poisson é utilizada para descrever número de espécies em determinado local, frequência de espécies raras no espaço ou no tempo, número de nascimentos em um município, entre outros.</p>
+<p>Vamos tomar como exemplo a produção de frutos em cada planta de uma variedade de tomate, <em>Lycopersicon esculentum</em> (Solanaceae). Em uma estufa, pesquisadores acompanharam o crescimento de 1000 plantas de tomate até a formação dos frutos. Em cada planta, os pesquisadores contaram o número de frutos produzidos. Vamos olhar a distribuição dos dados. Os dados estão no arquivo ‘tomates.csv’. Vamos carregar o arquivo e olhar as estatísticas descritivas.</p>
+<center>
+<img src="figuras/tomate.jpg" style="width:30.0%" />
+</center>
+<pre class="r"><code>tomates &lt;- read.csv(&quot;dados/tomates.csv&quot;)
+summary(tomates)</code></pre>
+<pre><code>##     Nfrutos      
+##  Min.   : 51.00  
+##  1st Qu.: 74.00  
+##  Median : 80.00  
+##  Mean   : 80.03  
+##  3rd Qu.: 86.00  
+##  Max.   :110.00</code></pre>
+<p>Vamos olhar graficamente em um histograma de densidade probabilística a distribuição dos dados e a média do número de frutos.</p>
+<pre class="r"><code>hist(tomates$Nfrutos, probability=TRUE, main=&quot;média=80&quot;)
+abline(v=mean(tomates$Nfrutos), col=&quot;red&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>Vamos comparar a distribuição observada com o esperado de uma poisson com <span class="math inline">\(\lambda\)</span> igual a média dos dados observados.</p>
+<pre class="r"><code># vamos calcular o máximo do número de frutos
+mfrut&lt;-max(tomates$Nfrutos)
+# vamos calcular a média do número de frutos
+lambda = mean(tomates$Nfrutos)
+hist(tomates$Nfrutos, probability = TRUE)
+points(dpois(0:mfrut, lambda), col=&quot;blue&quot;)</code></pre>
+<p><img src="pratica1_conhecendo_os_dados_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>Vamos calcular agora a variância da distribuição empírica e ver se ela se aproxima do valor de <span class="math inline">\(\lambda\)</span>.</p>
+<pre class="r"><code># variância
+var(tomates$Nfrutos)</code></pre>
+<pre><code>## [1] 78.21248</code></pre>
+<pre class="r"><code>mean(tomates$Nfrutos)</code></pre>
+<pre><code>## [1] 80.027</code></pre>
+</div>
+</div>
+<div id="sumario-das-distribuicoes" class="section level3">
+<h3>Sumário das distribuições</h3>
+<table>
+<colgroup>
+<col width="24%" />
+<col width="12%" />
+<col width="20%" />
+<col width="18%" />
+<col width="24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Distribuição</th>
+<th><span class="math inline">\(E(X)\)</span></th>
+<th><span class="math inline">\(\sigma^2(X)\)</span></th>
+<th>Uso</th>
+<th>Exemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Normal</td>
+<td><span class="math inline">\(\mu\)</span></td>
+<td><span class="math inline">\(\sigma^2\)</span></td>
+<td>Curva simétrica para dados contínuos</td>
+<td>Distribuição de tamanho</td>
+</tr>
+<tr class="even">
+<td>Binomial</td>
+<td><span class="math inline">\(np\)</span></td>
+<td><span class="math inline">\(np(1-p)\)</span></td>
+<td>Número de sucessos em <span class="math inline">\(n\)</span> tentativas</td>
+<td>Presença ou ausência de espécies</td>
+</tr>
+<tr class="odd">
+<td>Poisson</td>
+<td><span class="math inline">\(\lambda\)</span></td>
+<td><span class="math inline">\(\lambda\)</span></td>
+<td>Eventos raros independentes onde <span class="math inline">\(\lambda\)</span> é a taxa que o evento ocorre no espaço ou no tempo</td>
+<td>Distribuição de espécies raras no espaço</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
