@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 name: paRtilhando códigos de R
 title: uma página por Sara Mortara
  left:
@@ -30,3 +31,6 @@ exclude:
   - Gemfile.lock
 include: [_pages]
 
+=======
+theme: jekyll-theme-midnight
+>>>>>>> parent of 64a6465... adding specifications to config
