@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Sara Mortara" />
+
+
+<title>Prática 3: seleção de modelos</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">paRtilha de códigos em R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">home</a>
+</li>
+<li>
+  <a href="tutoriais.html">tutoriais</a>
+</li>
+<li>
+  <a href="aulas.html">aulas</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="http://github.com/saramortara">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/MortaraSara">
+    <span class="fa fa-twitter fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Prática 3: seleção de modelos</h1>
+<h4 class="author">Sara Mortara</h4>
+<h4 class="date">5 de dezembro de 2018</h4>
+
+</div>
+
+
+<p>Antes de começar, lembre-se sempre de Burnham &amp; Anderson (2002):</p>
+<center>
+<p><em>“we recommend more emphasis on thinking!”</em></p>
+<img src="figuras/book_BA.png" style="width:30.0%" />
+</center>
+<p>Nos tempos de hoje, nunca é demais reforçar que precisamos dedicar tempo a pensar e elaborar nossas hipóteses.</p>
+<p>Nesta pRática vamos rodar dois exemplos de seleção de modelos.</p>
+<div id="hipotese-do-disturbio-intermediario" class="section level2">
+<h2>1. Hipótese do distúrbio intermediário</h2>
+<p>Connell em 1978 propôs a hipótese do distúrbio intermediário que postula que em condições intermediárias de frequência ou intensidade de distúrbio, a riqueza de espécies é maior. Essa teoria também se aplica à densidade de polulações de determinadas espécies.</p>
+<center>
+<img src="figuras/disturbio.jpg" style="width:40.0%" />
+</center>
+<p>Vamos testar a hipótese do distúrbio intermediário na dinâmica da população de <em>Vellozia sincorana</em> (Velloziaceae) em campos rupestres sujeita a distúrbio por fogo. Sabe-se que plantas de <em>V. sincorana</em> são resistentes ao fogo e florescem após incêndios. Foram realizados experimentos controlados de fogo em intensidades diferentes (maior ou menor duração) e quantificaram o número de indivíduos em floração após o incêndio.</p>
+<center>
+<img src="figuras/velozzia.jpg" style="width:30.0%" />
+</center>
+<p>Para isso, pesquisadores investigaram a densidade de indivíduos em floração após diferentes intensidades de fogo. A variável resposta é a densidade de indivíduos férteis e a variável preditora é a intensidade do fogo.</p>
+<p><strong>Pergunta:</strong> Hipótese do distúrbio intermediário explica o padrão de floração de <em>V. sincorana</em>?</p>
+<p><strong>Hipóteses:</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Sob condições intermediárias de perturbação do fogo, haverá maior floração na população de <em>V. sincorana</em></p></li>
+<li><p>Se <em>V. sincorana</em> for muito resistente ao fogo, quanto maior a intensidade do fogo, maior será floração na população</p></li>
+</ol>
+<p><strong>Previsão:</strong></p>
+<p><img src="pratica3_selecao_modelos_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<pre class="r"><code># lendo os dados
+velo &lt;- read.csv(&quot;dados/vellozia.csv&quot;)</code></pre>
+<p>Fazendo a inspeção dos dados.</p>
+<pre class="r"><code># primeiras 6 linhas
+head(velo)</code></pre>
+<pre><code>##   fogo    N
+## 1    2 0.00
+## 2    3 0.02
+## 3    4 0.44
+## 4    5 0.32
+## 5    6 0.57
+## 6    7 0.56</code></pre>
+<pre class="r"><code># estrutura
+str(velo)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    19 obs. of  2 variables:
+##  $ fogo: int  2 3 4 5 6 7 8 9 10 11 ...
+##  $ N   : num  0 0.02 0.44 0.32 0.57 0.56 0.76 0.68 0.65 0.92 ...</code></pre>
+<pre class="r"><code># sumario
+summary(velo)</code></pre>
+<pre><code>##       fogo            N         
+##  Min.   : 2.0   Min.   :0.0000  
+##  1st Qu.: 6.5   1st Qu.:0.5650  
+##  Median :11.0   Median :0.6500  
+##  Mean   :11.0   Mean   :0.6153  
+##  3rd Qu.:15.5   3rd Qu.:0.7750  
+##  Max.   :20.0   Max.   :1.0000</code></pre>
+<p>Vamos olhar para a distribuição dos dados densidade de indivíduos em flor.</p>
+<pre class="r"><code># histograma dos valores de densidade
+hist(velo$N, xlab=&quot;Densidade de indivíduos em flor&quot;)
+# plotando em vermelho a media
+abline(v=mean(velo$N), col=&quot;red&quot;, lwd=3)</code></pre>
+<p><img src="pratica3_selecao_modelos_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Vamos olhar para a relação entre densidade de indivíduos férteis e intensidade do fogo.</p>
+<pre class="r"><code>plot(N ~ fogo, data=velo, 
+     xlab=&quot;Duração do fogo (horas)&quot;, 
+     ylab=&quot;Densidade de indivíduos em flor&quot;, las=1, bty=&quot;l&quot;)</code></pre>
+<p><img src="pratica3_selecao_modelos_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Vamos construir os modelos para representar cada uma das hipóteses.</p>
+<center>
+[]figuras/atencao.jpg){width=30%}
+</center>
+<p>Para construir uma curva que represente a função quadrática da hipótese 1, precisamos de uma expressão <span class="math inline">\(x + x^2\)</span>. Como a variável preditora <span class="math inline">\(x\)</span> é a duração do fogo, a expressão seria <span class="math inline">\(fogo + fogo^2\)</span>. No R, para colocar essa expressão precisamos usar a função I (identidade) para forçar que a expressão <span class="math inline">\(fogo^2\)</span> seja entendida como queremos. A notação seria então: <span class="math inline">\(fogo + I(fogo^2)\)</span>. Veja abaixo como fica isso no código.</p>
+<pre class="r"><code># 1. relacao unimodal, floracao maior em intensidades intermediarias
+h01 &lt;- lm(N ~ fogo + I(fogo^2), data=velo)
+
+# 2. relacao linear, floracao aumenta com intensidade
+h02 &lt;- lm(N ~ fogo, data=velo)
+
+##. hipotese de ausencia de efeito
+h00 &lt;- lm(N ~ 1, data=velo)</code></pre>
+<p>Vamos olhar para a estimativa dos parâmetros de cada um dos modelos.</p>
+<pre class="r"><code># hipotese 01
+coef(h01)</code></pre>
+<pre><code>##  (Intercept)         fogo    I(fogo^2) 
+## -0.186520124  0.135353236 -0.004550346</code></pre>
+<pre class="r"><code># hipotese 02
+coef(h02)</code></pre>
+<pre><code>## (Intercept)        fogo 
+##  0.22756140  0.03524561</code></pre>
+<pre class="r"><code># hipotese 03
+coef(h00)</code></pre>
+<pre><code>## (Intercept) 
+##   0.6152632</code></pre>
+<p>Vamos fazer o cálculo de AIC para comparar os modelos.</p>
+<pre class="r"><code>library(bbmle)</code></pre>
+<pre><code>## Loading required package: stats4</code></pre>
+<pre class="r"><code>AICtab(h01, h02, h00, weights=TRUE, base=TRUE)</code></pre>
+<pre><code>##     AIC   dAIC  df weight
+## h01 -16.9   0.0 4  0.9949
+## h02  -6.3  10.6 3  0.0051
+## h00   6.8  23.7 2  &lt;0.001</code></pre>
+<p>O modelo que melhor se ajusta aos dados é o modelo da hipótese 1 de que intensidades intermediárias de fogo favorecem a floração de <em>V. sincorana</em>.</p>
+<p>Vamos olhar para o ajuste do modelo aos dados. Primeiro o modelo da hipótese 1.</p>
+<pre class="r"><code>### grafico da hipotese 1
+
+# primeiro salvamos os valores do coeficiente em um objeto
+coef.h01 &lt;- coef(h01)
+# plotando os dados observados
+plot(N ~ fogo, data=velo, 
+     xlab=&quot;Duração do fogo (horas)&quot;, 
+     ylab=&quot;Densidade de indivíduos em flor&quot;, las=1, bty=&quot;l&quot;)
+# plotando a curva da hipotese 1 segundo a expressao
+# a + b*x + c*x^2
+curve(coef.h01[1] + coef.h01[2]*x + coef.h01[3]*x^2, add=TRUE, lwd=2, col=&#39;red&#39;)</code></pre>
+<p><img src="pratica3_selecao_modelos_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>Vamos olhar agora para o ajuste do modelo da hipótese 2 aos dados.</p>
+<pre class="r"><code>### grafico da hipotese 2
+# primeiro salvamos os valores do coeficiente em um objeto
+coef.h02 &lt;- coef(h02)
+# plotando os dados observados
+plot(N ~ fogo, data=velo, 
+     xlab=&quot;Duração do fogo (horas)&quot;, 
+     ylab=&quot;Densidade de indivíduos em flor&quot;, las=1, bty=&quot;l&quot;)
+# plotando a curva da hipotese 2 usando abline
+abline(coef.h02[1], coef.h02[2], lwd=2, col=&#39;blue&#39;)</code></pre>
+<p><img src="pratica3_selecao_modelos_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Vamos comparar os dois ajustes no mesmo gráfico.</p>
+<pre class="r"><code>### juntando as duas curvas no mesmo grafico
+# plotando os dados observados
+plot(N ~ fogo, data=velo, 
+     xlab=&quot;Duração do fogo (horas)&quot;, 
+     ylab=&quot;Densidade de indivíduos em flor&quot;, las=1, bty=&quot;l&quot;)
+# plotando a curva da hipotese 1 segundo a expressao
+# a + b*x + c*x^2
+curve(coef.h01[1] + coef.h01[2]*x + coef.h01[3]*x^2, add=TRUE, lwd=2, col=&#39;red&#39;)
+# plotando a curva da hipotese 2 usando abline
+abline(coef.h02[1], coef.h02[2], lwd=2, col=&#39;blue&#39;)
+# fazendo a legenda
+legend(&quot;topleft&quot;, c(&quot;hipótese 1&quot;, &quot;hipótese 2&quot;), bty=&quot;n&quot;, 
+       col=c(&#39;red&#39;, &#39;blue&#39;), lty=1)</code></pre>
+<p><img src="pratica3_selecao_modelos_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p>Como você interpreta o resultado encontrado? Você acha que a hipótese 1 é uma boa explicação para o padrão de floração na população?</p>
+</div>
+<div id="impacto-das-redes-sociais-em-vendas" class="section level2">
+<h2>2. Impacto das redes sociais em vendas</h2>
+<p>Vamos entender o impacto do investimento diferentes meios de propaganda na venda de determinado produto. A ideia por trás deste exemplo é que, na sociedade de hoje, basta investir em propaganda em uma rede social que é suficiente para observar um crescimento de vendas. Uma empresa, em locais diferentes investiu de forma diferente em tipos de propagandas. Vamos entender o padrão de vendas a partir do investimento em propaganda.</p>
+<center>
+<img src="figuras/propaganda.jpg" style="width:40.0%" />
+</center>
+<p><strong>Pergunta:</strong> Qual propaganda é mais eficaz para aumentar o número de vendas de um produto?</p>
+<p><strong>Hipóteses:</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Apenas investir em propaganda em redes sociais é suficiente para aumentar o número de vendas</p></li>
+<li><p>É preciso investir em propaganda em redes sociais e jornal</p></li>
+<li><p>Apenas investir em propaganda no facebook é suficiente para aumentar o número de vendas.</p></li>
+<li><p>Apenas investir em propaganda no youtube é suficiente para aumentar o número de vendas.</p></li>
+<li><p>Hipótese de que a propaganda é a alma do negócio é falsa, isto é, a ausência de efeito da propaganda no número de vendas.</p></li>
+</ol>
+<p><strong>Previsão:</strong></p>
+<p><img src="pratica3_selecao_modelos_files/figure-html/unnamed-chunk-13-1.png" width="672" /><img src="pratica3_selecao_modelos_files/figure-html/unnamed-chunk-13-2.png" width="672" /></p>
+<p>Vamos ler o conjunto de dados no R. A coluna <tt> sales </tt> contém o número de vendas, e as colunas <tt> youtube </tt>, <tt> facebook </tt>, <tt> newspaper </tt> contém o investimento (em dinheiros) em cada um dos tipos de propaganda.</p>
+<pre class="r"><code>vendas &lt;- read.csv(&quot;dados/marketing.csv&quot;)
+head(vendas)</code></pre>
+<pre><code>##   youtube facebook newspaper sales
+## 1  276.12    45.36     83.04 26.52
+## 2   53.40    47.16     54.12 12.48
+## 3   20.64    55.08     83.16 11.16
+## 4  181.80    49.56     70.20 22.20
+## 5  216.96    12.96     70.08 15.48
+## 6   10.44    58.68     90.00  8.64</code></pre>
+<p>Vamos construir um modelo para cada hipótese:</p>
+<pre class="r"><code># hipotese 1
+m01 &lt;- lm(sales ~ youtube + facebook, data=vendas)
+# hipotese 2
+m02 &lt;- lm(sales ~ youtube + facebook + newspaper, data=vendas)
+# hipotese 3
+m03 &lt;- lm(sales ~ facebook, data=vendas)
+# hipotese 4
+m04 &lt;- lm(sales ~ youtube, data=vendas)
+# hipotese de ausencia de efeito
+m00 &lt;- lm(sales ~ 1, data=vendas)</code></pre>
+<p>Vamos comparar simultaneamente todas as hipóteses usando o critério do AIC.</p>
+<pre class="r"><code>library(bbmle)
+
+AICtab(m01, m02, m03, m04, m00, base=TRUE, weights=TRUE)</code></pre>
+<pre><code>##     AIC    dAIC   df weight
+## m01  853.3    0.0 4  0.73  
+## m02  855.3    2.0 5  0.27  
+## m04 1117.0  263.7 3  &lt;0.001
+## m03 1225.6  372.3 3  &lt;0.001
+## m00 1304.3  451.0 2  &lt;0.001</code></pre>
+<p>O modelo que melhor se ajusta aos dados é o modelo com as variáveis <tt> youtube </tt> e <tt> facebook </tt>. Entretanto, a diferença de AIC é 2 (o que seria exatamente o corte). Como você poderia sustentar a escolha do modelo <t>m01</tt>?</p>
+<p>Para visualizar a resposta do modelo selecionado com duas variáveis contíbuas como preditoras não é trivial. Queremos fugir de uma representação 3D porque é complicada demais. Neste caso, vamos usar o efeito <tt>facebook</tt> no eixo x e separar a outra variável preditora <tt> youtube </tt> em duas classes pela mediana. Importante entender que a variável <tt> youtube </tt> é contínua porém estamos separando em classes <strong>apenas</strong> para visualização.</p>
+<p>Vamos primeiro guardar em objetos os coeficientes do modelo.</p>
+<pre class="r"><code># guardando o coeficiente do modelo em um objeto
+coef.m01 &lt;- coef(m01)</code></pre>
+<p>Então, vamos separar os dados de investimento de dinheiro no <tt> youtube </tt> em duas classes.</p>
+<pre class="r"><code># guarda o valor da mediana em um objeto
+med.you &lt;- median(vendas$youtube)
+# 50% menor que a mediana
+you1 &lt;- vendas$youtube[vendas$youtube&lt;med.you] 
+mean(you1)</code></pre>
+<pre><code>## [1] 86.3604</code></pre>
+<pre class="r"><code># 50% maior que a mediana
+you2 &lt;- vendas$youtube[vendas$youtube&gt;med.you]
+mean(you2)</code></pre>
+<pre><code>## [1] 266.5416</code></pre>
+<p>Vamos finalmente fazer dois gráficos. No primeiro, vamos plotar os dados e o ajuste do modelo ao conjunto de dados onde o investimento no youtube é menor do que a mediana (-179,7). No segundo gráfico, vamos plotar os dados e o ajuste do modelo ao conjunto de dados onde o investimento no youtube é menor do que mediana.</p>
+<p>Como calculamos a linha do previsto? Podemos fazer isso simplesmente pensando na equação da regressão múltipla:</p>
+<p><span class="math display">\[ Y = \alpha + \beta_{1}X_{1} + \beta_{2}X_{2}\]</span> O valor dos coeficientes do modelo:</p>
+<pre class="r"><code>coef.m01</code></pre>
+<pre><code>## (Intercept)     youtube    facebook 
+##  3.50531989  0.04575482  0.18799423</code></pre>
+<p>representam: <span class="math inline">\(\alpha\)</span>, <span class="math inline">\(\beta_{1}\)</span> e <span class="math inline">\(\beta_{2}\)</span>, respectivamente. Para o valor de <span class="math inline">\(X_{1}\)</span> usaremos a média de cada classe de investimento no <tt>youtube</tt>. O valor de <span class="math inline">\(X_{2}\)</span> é justamente o eixo x do nosso gráfico, isto é, cada valor de investimento no <tt>facebook</tt>.</p>
+<pre class="r"><code># define parametros graficos
+par(mfrow=c(1,2), las=1, bty=&quot;l&quot;)
+# plot dos valores de youtube &lt; mediana 
+plot(sales ~ facebook, data=vendas[vendas$youtube&lt;med.you,], 
+     main=&quot;N vendas onde youtube &lt; 179,7&quot;,
+     col=&quot;tomato&quot;, ylim=c(0,30), ylab=&quot;N de vendas&quot;)
+# linha do previsto pelo modelo
+## a + b*x1 + c*x2, onde x1=media dos valores da classe youtube&lt;mediana
+abline(a=coef.m01[1] + coef.m01[2]*mean(you1), 
+       b=coef.m01[3], col=&#39;tomato&#39;, lwd=2)
+# plot dos valores de youtube &gt; mediana
+plot(sales ~ facebook, data=vendas[vendas$youtube&gt;med.you,], 
+     main=&quot;N vendas onde youtube &gt; 179,7&quot;,
+     col=&quot;darkred&quot;, ylim=c(0,30), ylab=&quot;N de vendas&quot;)
+# linha do previsto pelo modelo
+## a + b*x1 + c*x2, onde x1=media dos valores da classe youtube&gt;mediana
+abline(a=coef.m01[1] + coef.m01[2]*mean(you2), 
+       b=coef.m01[3], col=&#39;darkred&#39;, lwd=2)</code></pre>
+<p><img src="pratica3_selecao_modelos_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))</code></pre>
+<p>Como você interpretaria o resultado encontrado? Você recomendaria alguma estratégia de investimento baseada nos resultados?</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

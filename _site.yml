@@ -1,0 +1,20 @@
+name: "paRtilha de códigos em R"
+navbar:
+  title: "paRtilha de códigos em R"
+  left:
+    - text: "home"
+      href: index.html
+    - text: "tutoriais"
+      href: tutoriais.html
+    - text: "aulas"
+      href: aulas.html
+
+  right:
+    - icon: fa-github fa-lg
+      href: http://github.com/saramortara
+    - icon: fa-twitter fa-lg
+      href: https://twitter.com/MortaraSara
+
+
+
+

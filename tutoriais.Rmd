@@ -1,0 +1,11 @@
+---
+title: "tutoriais"
+---
+
+Compartilho aqui os tutoriais desenvolvidos para as aulas práticas. 
+
+- [Introdução ao R](pratica0_introducao_ao_R.html)
+- [Conhecendo os dados e distribuições de probabilidade](pratica1_conhecendo_os_dados.html)
+- [Prática sobre modelos lineares](pratica2_regressao_linear.html)
+- [Prática sobre seleção de modelos](pratica3_selecao_modelos.html)
+- [Prática sobre glm]()

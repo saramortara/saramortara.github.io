@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Sara Mortara" />
+
+
+<title>Prática 4: GLM Poisson e Binomial</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">paRtilha de códigos em R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">home</a>
+</li>
+<li>
+  <a href="tutoriais.html">tutoriais</a>
+</li>
+<li>
+  <a href="aulas.html">aulas</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="http://github.com/saramortara">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/MortaraSara">
+    <span class="fa fa-twitter fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Prática 4: GLM Poisson e Binomial</h1>
+<h4 class="author">Sara Mortara</h4>
+<h4 class="date">6 de dezembro</h4>
+
+</div>
+
+
+<p>Nem tudo na vida é normal. Estamos aqui para aprender como construir modelos lineares para variáveis com erro não normal.</p>
+<div id="decaimento-do-numero-de-doentes" class="section level2">
+<h2>1. Decaimento do número de doentes</h2>
+<p>No contexto da epidemiologia, após o pico de contaminação espera-se que haja um declínio no número de doentes contaminados com o vírus da influenza. Sabendo que conhecemos o pico de contaminação, fizemos uma observação controle em dois locais onde: um onde havia controle por vacina e outro sem controle.</p>
+<p><strong>Pergunta:</strong> vacina acelera o decaimento da epidemia de influenza?</p>
+<p><strong>Hipóteses:</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>A vacina é eficaz e em local onde há o controle da vacina, o decaimento da infestação é maior</p></li>
+<li><p>A vacina não eficaz e não há diferença no decaimento do número de doentes entre locais com e sem vacina ao longo do tempo</p></li>
+</ol>
+<p><strong>Previsão:</strong></p>
+<p><img src="pratica4_glm_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><strong>Modelos</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>N de doentes ~ tempo + tratamento</p></li>
+<li><p>N de doentes ~ tempo</p></li>
+<li><p>N de doentes ~ 1</p></li>
+</ol>
+<div id="lendo-e-entendendo-os-dados" class="section level3">
+<h3>Lendo e entendendo os dados</h3>
+<pre class="r"><code>## lendo os dados
+### ajuste para o seu caminho
+doentes &lt;- read.csv(&quot;dados/doentes.csv&quot;)</code></pre>
+<p>Inspecione os dados em um histograma.</p>
+<pre class="r"><code>hist(doentes$N, probability = TRUE)</code></pre>
+<p><img src="pratica4_glm_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>E vamos olhar o sumário dos dados:</p>
+<pre class="r"><code>summary(doentes)</code></pre>
+<pre><code>##        N              dias       local 
+##  Min.   : 0.00   Min.   : 1.00   A:15  
+##  1st Qu.:32.25   1st Qu.: 4.25   B:15  
+##  Median :46.00   Median : 8.00         
+##  Mean   :43.83   Mean   : 8.00         
+##  3rd Qu.:55.00   3rd Qu.:11.75         
+##  Max.   :80.00   Max.   :15.00</code></pre>
+<p>E também a relação entre a variável preditora e a resposta.</p>
+<pre class="r"><code>y.lim &lt;- range(doentes$N) # padronizando o limite do eixo y
+plot(N ~ dias, data=doentes[doentes$local==&quot;A&quot;,], 
+     col=&#39;tomato&#39;, ylim=y.lim, 
+     ylab=&quot;N de doentes&quot;, las=1, bty=&#39;l&#39;)
+points(N ~ dias, data=doentes[doentes$local==&quot;B&quot;,], col=&#39;navy&#39;)
+legend(&quot;topleft&quot;, c(&quot;com vacina&quot;, &quot;sem vacina&quot;), 
+       col=c(&quot;navy&quot;, &quot;tomato&quot;), pch=1)</code></pre>
+<p><img src="pratica4_glm_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+</div>
+<div id="construindo-os-modelos" class="section level3">
+<h3>Construindo os modelos</h3>
+<p>Agora vamos construir os modelos para cada uma das hipóteses.</p>
+<pre class="r"><code>#hipótese 1 vacina funciona
+p01 &lt;- glm(N ~ dias + local, data=doentes, family=&#39;poisson&#39;)
+# hipótese 2 vacina não funciona
+p02 &lt;- glm(N ~ dias, data=doentes, family=&#39;poisson&#39;)
+# hipótese 3
+p03 &lt;- glm(N ~ 1, data=doentes, family=&#39;poisson&#39;)</code></pre>
+<p>Incluímos também uma terceira hipótese de ausência de efeito. No caso deste exemplo, qual a diferença entre a hipótese 2 e 3? Ambas não seriam uma hipótese nula em relação à hipótese central? Você acha que é sempre necessário incluir uma hipótese de ausência total do efeito?</p>
+<p>Vamos inspecionar agora o sumário de cada um dos modelos.</p>
+<p>Use a função summary e atente para os coefientes estimados e a proporção de variação residual.</p>
+<pre class="r"><code>summary(p01)
+summary(p02)
+summary(p03)</code></pre>
+<p>E agora vamos construir a tabela de AIC. Lembre-se, para isso precisamos do pacote <tt> bbmle</tt>. Para carregar o pacote usamos a função <tt>library</tt>.</p>
+<pre class="r"><code>library(bbmle)
+AICtab(p01, p02, p03)</code></pre>
+<pre><code>##     dAIC  df
+## p01   0.0 3 
+## p02  77.2 2 
+## p03 143.3 1</code></pre>
+<p>Vamos então construir o gráfico de ajuste do modelo aos dados. Isto não é trivial para os GLMs e vamos usar a função predict para nos ajudar.</p>
+<pre class="r"><code># primeiro crimos uma sequência para o eixo x
+xv&lt;-1:15
+# vamos criar um vetor com 15x a letra &quot;A&quot; do primeiro tratamento
+tA&lt;-rep(&quot;A&quot;,15)
+# calculando os valores previstos para o tratamento A
+yA&lt;-predict(p01,list(local=factor(tA),dias=xv),type=&quot;response&quot;)
+# vamos também criar um vetor com 15x a letra &quot;B&quot;  para o segundo tratamento
+tB&lt;-rep(&quot;B&quot;,15)
+# calculando os valores previstos para o tratamento B
+yB&lt;-predict(p01,list(local=factor(tB),dias=xv),type=&quot;response&quot;)</code></pre>
+</div>
+<div id="ajuste-do-modelo-aos-dados" class="section level3">
+<h3>Ajuste do modelo aos dados</h3>
+<p>Agora vamos plotar os valores observados e acrescentar os valores previstos pelo melhor modelo.</p>
+<pre class="r"><code># plot dos dados do tratamento A
+plot(N ~ dias, data=doentes[doentes$local==&quot;A&quot;,], 
+     col=&#39;tomato&#39;, ylim=y.lim, 
+     ylab=&quot;N de doentes&quot;, las=1, bty=&#39;l&#39;)
+# adicionando os dados do tratamento B
+points(N ~ dias, data=doentes[doentes$local==&quot;B&quot;,], col=&#39;navy&#39;)
+# incluindo a legenda
+legend(&quot;bottomleft&quot;, c(&quot;com vacina&quot;, &quot;sem vacina&quot;), 
+       col=c(&quot;navy&quot;, &quot;tomato&quot;), pch=1)
+# linha dos previstos para o tratamento A
+lines(xv,yA, col=&quot;tomato&quot;)
+# linha dos previstos para o tratamento B
+lines(xv,yB, col=&quot;navy&quot;)</code></pre>
+<p><img src="pratica4_glm_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>O modelo explica boa parte da variação dos dados?</p>
+</div>
+</div>
+<div id="floracao-apos-inducao-do-crescimento" class="section level2">
+<h2>2. Floração após indução do crescimento</h2>
+<p>Este é um exemplo de um experimento no qual cinco variedades de plantas perenes foram submetidas a seis doses de um hormônio de crescimento. Após seis semanas, foram as plantas foram classificadas em com ou sem flor.</p>
+<p><strong>Pergunta:</strong> O hormônio de crescimento facilita a floração? O efeito do hormônio é diferente entre as variedades de planta?</p>
+<p><strong>Hipóteses:</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Dosagens maiores de hormônio aumentam a proporção de plantas em flor</p></li>
+<li><p>Dosagens maiores de hormônio aumentam a proporção de plantas em flor e a resposta sensibilidade de cada variedade de planta ao hormônio é diferente</p></li>
+<li><p>Não há efeito do hormônio ou variedade de planta na resposta</p></li>
+</ol>
+<p><strong>Modelos</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>Proporção de flor ~ dosagem</p></li>
+<li><p>Proporção de flor ~ dosagem + variedade</p></li>
+<li><p>Proporção de flor ~ 1</p></li>
+</ol>
+<div id="lendo-e-entendendo-os-dados-1" class="section level3">
+<h3>Lendo e entendendo os dados</h3>
+<p>Vamos ler a planilha de dados. Lembre-se de ajustar o caminho para o seu diretório de trabalho.</p>
+<pre class="r"><code>flor &lt;- read.table(&quot;dados/flowering.txt&quot;, header=TRUE, sep=&#39;\t&#39;)</code></pre>
+<p>Vamos inspecionar os dados.</p>
+<pre class="r"><code>summary(flor)</code></pre>
+<pre><code>##     flowered          number        dose       variety
+##  Min.   : 0.000   Min.   :10   Min.   : 0.00   A:6    
+##  1st Qu.: 0.250   1st Qu.:12   1st Qu.: 1.00   B:6    
+##  Median : 3.000   Median :15   Median : 6.00   C:6    
+##  Mean   : 5.767   Mean   :16   Mean   :10.17   D:6    
+##  3rd Qu.: 9.000   3rd Qu.:18   3rd Qu.:16.00   E:6    
+##  Max.   :21.000   Max.   :28   Max.   :32.00</code></pre>
+<p>Vamos calcular a proporção de flores e o olhar os valores em um histograma.</p>
+<pre class="r"><code>flor$prop &lt;- flor$flowered/flor$number</code></pre>
+<pre class="r"><code>hist(flor$prop)</code></pre>
+<p><img src="pratica4_glm_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>Vamos então olhar para a relação entre a variável preditora e a resposta.</p>
+</div>
+<div id="bonus" class="section level3">
+<h3>BÔNUS</h3>
+<center>
+<img src="figuras/bonus.jpg" style="width:30.0%" />
+</center>
+<p>Temos cinco variedades de planta e queremos utilizar uma cor para cada. Vamos nos divertir um pouco na escolha de cores. Você tem duas opções: 1. usar uma paleta de cores maravilhosa ou 2. usar uma paleta de cores apenas okey.</p>
+<p>Opção 1: paleta de cores maravilhosa</p>
+<center>
+<img src="figuras/rushmore.jpeg" style="width:30.0%" />
+</center>
+<pre class="r"><code>## instale o pacote para a paleta de cores usando o comando:
+# install.packages(&quot;wesanderson&quot;)
+## carregue o pacote 
+library(wesanderson)
+# crie um vetor com as cores do filme Rushmore de Wes Anderson
+cor &lt;- wes_palette(&quot;Rushmore1&quot;)</code></pre>
+<p>Opção 2: paleta de cores okey</p>
+<center>
+<img src="figuras/rainbow.png" style="width:30.0%" />
+</center>
+<pre class="r"><code>## use a funcao rainbow para ecolher 5 cores diferentes
+# cor &lt;- rainbow(5)</code></pre>
+<p>Vamos finalmente, olhar para as variáveis no gráfico:</p>
+<pre class="r"><code>plot(prop ~ dose, data=flor, type=&#39;n&#39;, las=1, bty=&#39;l&#39;) # este comando faz com que nenhum ponto apareça no gráfico. por que?
+# aqui, dependendo da paleta de cores que você escolheu seu gráfico ficará maravilhoso, ou não :P
+points(prop ~ dose, data=flor[flor$variety==&quot;A&quot;,], pch=19,
+       col=cor[1])
+points(prop ~ dose, data=flor[flor$variety==&quot;B&quot;,], pch=19,
+       col=cor[2])
+points(prop ~ dose, data=flor[flor$variety==&quot;C&quot;,], pch=19, 
+       col=cor[3])
+points(prop ~ dose, data=flor[flor$variety==&quot;D&quot;,], pch=19,
+       col=cor[4])
+points(prop ~ dose, data=flor[flor$variety==&quot;E&quot;,], pch=19,
+       col=cor[5])
+legend(&quot;topright&quot;, c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;), 
+       col=cor, pch=19)</code></pre>
+<p><img src="pratica4_glm_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+<div id="construindo-os-modelos-1" class="section level3">
+<h3>Construindo os modelos</h3>
+<p>Agora vamos construir os modelos no R.</p>
+<pre class="r"><code># primeiro criamos um vetor com a variável resposta
+flor$y1 &lt;- flor$flowered
+flor$y2 &lt;- flor$number-flor$flowered
+
+## hipótese 1
+b01 &lt;- glm(cbind(y1,y2) ~ dose, data=flor, family=&quot;binomial&quot;)
+
+## hipótese 2
+b02 &lt;- glm(cbind(y1,y2) ~ dose*variety, data=flor, family=&quot;binomial&quot;)
+
+## hipótese 3
+b03 &lt;- glm(cbind(y1,y2) ~ 1, data=flor, family=&quot;binomial&quot;)</code></pre>
+<p>Use a função summary para inspecionar os modelos criados.</p>
+<pre class="r"><code>summary(b01)
+summary(b02)
+summary(b03)</code></pre>
+<p>E agora vamos construir a tabela de AIC para os três modelos.</p>
+<pre class="r"><code>AICtab(b01, b02, b03)</code></pre>
+<pre><code>##     dAIC  df
+## b02   0.0 10
+## b01  39.2 2 
+## b03 234.3 1</code></pre>
+<p>Vamos então construir o gráfico do ajuste do modelo aos dados. De novo, este gráfico não é trivial. Vamos entender passo a passo. O melhor aqui é construir um modelo para cada dosagem e plotar o ajuste. Vamos lá.</p>
+<p>Primeiro, criamos os modelos:</p>
+<pre class="r"><code># variedade A
+A &lt;- glm(cbind(y1,y2) ~ dose, data=flor[flor$variety==&quot;A&quot;,],
+         family=&quot;binomial&quot;)
+# variedade B
+B &lt;- glm(cbind(y1,y2) ~ dose, data=flor[flor$variety==&quot;B&quot;,],
+         family=&quot;binomial&quot;)
+# variedade C
+C &lt;- glm(cbind(y1,y2) ~ dose, data=flor[flor$variety==&quot;C&quot;,],
+         family=&quot;binomial&quot;)
+# variedade D
+D &lt;- glm(cbind(y1,y2) ~ dose, data=flor[flor$variety==&quot;D&quot;,],
+         family=&quot;binomial&quot;)
+# variedade E
+E &lt;- glm(cbind(y1,y2) ~ dose, data=flor[flor$variety==&quot;E&quot;,],
+         family=&quot;binomial&quot;)</code></pre>
+<p>E agora calculamos o predito para cada modelo.</p>
+<pre class="r"><code># guardando em um objeto a variável que será o eixo x
+xv&lt;-0:30
+prevA &lt;- predict(A,list(dose=xv),type=&quot;response&quot;)
+prevB &lt;- predict(B,list(dose=xv),type=&quot;response&quot;)
+prevC &lt;- predict(C,list(dose=xv),type=&quot;response&quot;)
+prevD &lt;- predict(D,list(dose=xv),type=&quot;response&quot;)
+prevE &lt;- predict(E,list(dose=xv),type=&quot;response&quot;)</code></pre>
+<p>Vamos terminar com o super gráfico.</p>
+<pre class="r"><code>### plot que já fizemos antes ###
+plot(prop ~ dose, data=flor, type=&#39;n&#39;, las=1, bty=&#39;l&#39;) # este comando faz com que nenhum ponto apareça no gráfico. por que?
+# aqui, dependendo da paleta de cores que você escolheu seu gráfico ficará maravilhoso, ou não :P
+points(prop ~ dose, data=flor[flor$variety==&quot;A&quot;,], pch=19,
+       col=cor[1])
+points(prop ~ dose, data=flor[flor$variety==&quot;B&quot;,], pch=19,
+       col=cor[2])
+points(prop ~ dose, data=flor[flor$variety==&quot;C&quot;,], pch=19, 
+       col=cor[3])
+points(prop ~ dose, data=flor[flor$variety==&quot;D&quot;,], pch=19,
+       col=cor[4])
+points(prop ~ dose, data=flor[flor$variety==&quot;E&quot;,], pch=19,
+       col=cor[5])
+legend(&quot;topleft&quot;, c(&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;), 
+       col=cor, pch=19)
+lines(xv,prevA, col=cor[1], lwd=2)
+lines(xv,prevB, col=cor[2], lwd=2)
+lines(xv,prevC, col=cor[3], lwd=2)
+lines(xv,prevD, col=cor[4], lwd=2)
+lines(xv,prevE, col=cor[5], lwd=2)</code></pre>
+<p><img src="pratica4_glm_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+<p>Como podemos perceber, o modelo é razoável para as variedades A e E, é moderado para a variedade C e muito fraco para B e D. Para as variedades B e D, o modelo super-estima a proporção de flores na dose zero. Para a variedade B parece haver uma inibição na floração na dose maior porque o gráfico cai de 90% na dosagem 16 para apenas 50% na dosagem 32. A variedade D parece ter crescimento assintótico até menos de 100% de floração. As falhas do modelo em se ajustar bem aos dados merecem bastante atenção. Ainda não fomos capazes de modelar bem os dados. Que tipo de estudo precisaríamos fazer para entender melhor a resposta das diferentes variedades às dosagens do hormônio?</p>
+<center>
+<div id="fim" class="section level4">
+<h4>FIM!</h4>
+<p>Se você chegou até o final desta pRática, considere-se vencedoR(a)!</p>
+<img src="figuras/success.jpg" style="width:30.0%" />
+</center>
+</div>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

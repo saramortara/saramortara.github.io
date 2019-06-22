@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Sara Mortara" />
+
+
+<title>Prática 2: Regressão linear</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">paRtilha de códigos em R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">home</a>
+</li>
+<li>
+  <a href="tutoriais.html">tutoriais</a>
+</li>
+<li>
+  <a href="aulas.html">aulas</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="http://github.com/saramortara">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="https://twitter.com/MortaraSara">
+    <span class="fa fa-twitter fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Prática 2: Regressão linear</h1>
+<h4 class="author">Sara Mortara</h4>
+<h4 class="date">4 de dezembro de 2018</h4>
+
+</div>
+
+
+<p>Sempre começamos definindo o diretório de trabalho. A recomendação é que você trabalhe dentro do diretório ‘praticas’ na pasta ‘atividadesR’. Assim, você precisa apenas alterar o caminho para o seu diretório de trabalho e não para os dados.</p>
+<p>Assumindo que:</p>
+<ul>
+<li>conhecemos bem os dados</li>
+<li>os dados seguem uma distribuição normal</li>
+<li>queremos avaliar se uma (ou mais variáveis) tem efeito linear sobre outra</li>
+</ul>
+<p>Vamos usar regressão linear para responder algumas perguntas. Apesar das premissas serem um pouco óbvias, não é trivial que qualquer usuário(a) de uma regressão linear tenha claramente assumido essas premissas. Mas você não é desses(as)…</p>
+<div id="um-detalhe-importante-sobre-as-praticas" class="section level2">
+<h2>Um detalhe importante sobre as pRáticas</h2>
+<p>Sempre que ajustarmos um modelo vamos ajustar dentro de um contexto. Os modelos não estão aí soltos no mundo, os modelos são a representação de uma hipótese que queremos testar. A hipótese (ou múltiplas hipóteses) está contextualizada em algum campo teórico do conhecimento.</p>
+<p>Todos os exercícios práticos serão apresentados como:</p>
+<ul>
+<li><p>Pergunta</p></li>
+<li><p>Hipótese</p></li>
+<li><p>Previsão</p></li>
+<li><p>Modelos</p></li>
+</ul>
+</div>
+<div id="a-dieta-da-lagarta" class="section level2">
+<h2>1. A dieta da lagarta</h2>
+<center>
+<img src="figuras/lagarta.jpg" style="width:50.0%" />
+</center>
+<p><strong>Pergunta:</strong> compostos químicos da folha afetam o crescimento de lagartas?</p>
+<p><strong>Hipótese:</strong> toxicidade do tanino na folha diminui o crescimento de lagartas</p>
+<p><strong>Previsão:</strong> lagartas que consomem folhas com maior quantidade de tanino irão crescer menos</p>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p><strong>Modelo:</strong> <span class="math display">\[Y = \alpha + \beta X \]</span></p>
+<p>onde <span class="math inline">\(Y\)</span> é a variável resposta crescimento e <span class="math inline">\(X\)</span> é a variável resposta quantidade de tanino.</p>
+<p>No R, a notação seria <tt> y ~ x </tt>. Vamos ao R.</p>
+<pre class="r"><code># lendo os dados
+lag &lt;- read.table(&quot;dados/regression.txt&quot;, header=TRUE)</code></pre>
+<p>Vamos conhecer os dados. Primeiro o cabeçalho e o sumário.</p>
+<pre class="r"><code># checando as seis primeiras linhas dos dados
+head(lag)</code></pre>
+<pre><code>##   growth tannin
+## 1     12      0
+## 2     10      1
+## 3      8      2
+## 4     11      3
+## 5      6      4
+## 6      7      5</code></pre>
+<pre class="r"><code># checando o sumário das variáveis
+summary(lag)</code></pre>
+<pre><code>##      growth           tannin 
+##  Min.   : 2.000   Min.   :0  
+##  1st Qu.: 3.000   1st Qu.:2  
+##  Median : 7.000   Median :4  
+##  Mean   : 6.889   Mean   :4  
+##  3rd Qu.:10.000   3rd Qu.:6  
+##  Max.   :12.000   Max.   :8</code></pre>
+<p>Agora vamos visualizar a distribuição da variável resposta crescimento em um boxplot.</p>
+<pre class="r"><code># boxplot do crescimento
+boxplot(lag$growth, ylab=&quot;crescimento&quot;)</code></pre>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>E vamos olhar qual a relação entre quantidade de tanino na dieta e crescimento das lagartas.</p>
+<pre class="r"><code># visualizando a relação entre crescimento e tanino em um gráfico
+plot(growth ~ tannin, data=lag, 
+     xlab=&quot;Quantidade de tanino&quot;, ylab=&quot;Crescimento&quot;)</code></pre>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>Vamos então construir o modelo linear entre as duas variáveis no R. Note que usamos a mesma notação do gráfico <tt> growth ~ tannin </tt> para criar o modelo.</p>
+<pre class="r"><code># criando o modelo linear e guardando no objeto mod.lag
+mod.lag &lt;-lm(growth ~ tannin, data=lag)</code></pre>
+<p>Vamos checar a estimativa dos parâmetros de intercepto e inclinação:</p>
+<pre class="r"><code>coef(mod.lag)</code></pre>
+<pre><code>## (Intercept)      tannin 
+##   11.755556   -1.216667</code></pre>
+<p>Existe um efeito negativo da quantidade de tanino na dieta no crescimento das lagartas.</p>
+<p>E agora vamos olhar para o sumário do modelo. Preste mais atenção ao valor da estimativa dos parâmetros e do intervalo de confiança da estimativa do que no valor de <tt> p </tt>.</p>
+<pre class="r"><code># checando o sumário do modelo
+summary(mod.lag)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = growth ~ tannin, data = lag)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -2.4556 -0.8889 -0.2389  0.9778  2.8944 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  11.7556     1.0408  11.295 9.54e-06 ***
+## tannin       -1.2167     0.2186  -5.565 0.000846 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 1.693 on 7 degrees of freedom
+## Multiple R-squared:  0.8157, Adjusted R-squared:  0.7893 
+## F-statistic: 30.97 on 1 and 7 DF,  p-value: 0.0008461</code></pre>
+<div id="o-ajuste-do-modelo-aos-dados" class="section level3">
+<h3>O ajuste do modelo aos dados</h3>
+<pre class="r"><code>plot(growth ~ tannin, data=lag, bty=&#39;l&#39;, xlab=&quot;quantidade de tanino&quot;, 
+     ylab=&quot;crescimento&quot;, pch=19)
+abline(mod.lag, lwd=2)</code></pre>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>O ajuste parece bom, vamos fazer a inspeção dos resíduos do modelo.</p>
+<pre class="r"><code>par(mfrow=c(2,2))
+plot(mod.lag)</code></pre>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<pre class="r"><code>par(mfrow=c(1,1))</code></pre>
+</div>
+</div>
+<div id="genero-e-remuneracao" class="section level2">
+<h2>2. Gênero e remuneração</h2>
+<center>
+<img src="figuras/gender_gap.jpg" style="width:60.0%" />
+</center>
+<p><strong>Pergunta:</strong> mulheres ainda recebem menos do que homem?</p>
+<p><strong>Hipótese:</strong> homens recebem mais do que mulheres</p>
+<p><strong>Previsão:</strong></p>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<p><strong>Modelo:</strong></p>
+<p><span class="math display">\[Y = \alpha + \beta X \]</span></p>
+<p>onde <span class="math inline">\(Y\)</span> é a variável resposta salário e <span class="math inline">\(X\)</span> é a variável preditora sexo.</p>
+<p>No R, a notação seria <tt> y ~ x </tt>. Vamos ao R.</p>
+<pre class="r"><code># lendo os dados
+sal &lt;- read.csv(&quot;dados/salarios.csv&quot;)</code></pre>
+<p>Vamos conhecer mais os dados:</p>
+<pre class="r"><code># lendo as seis primeiras linhas
+head(sal)</code></pre>
+<pre><code>##   salario sexo
+## 1    2920    H
+## 2    2768    H
+## 3    2798    H
+## 4    2514    H
+## 5    2414    H
+## 6    2895    H</code></pre>
+<p>Fazendo o sumário do objeto <tt> sal </tt>:</p>
+<pre class="r"><code># sumario dos dados
+summary(sal)</code></pre>
+<pre><code>##     salario     sexo  
+##  Min.   :1524   H:30  
+##  1st Qu.:1966   M:30  
+##  Median :2292         
+##  Mean   :2325         
+##  3rd Qu.:2666         
+##  Max.   :3080</code></pre>
+<p>Note que a variável preditora agora é categórica. Vamos olhar a média e o desvio padrão do salário de homens e mulheres. Para isso, vamos usar a função <tt> tapply </tt> que aplica uma função a um vetor, condicionada a um fator.</p>
+<pre class="r"><code># calculando a media por sexo com a funcao tapply
+# X = vetor que quer aplicar a funcao
+# INDEX = fator condicionante
+# FUN = funcao a ser aplicada
+tapply(X=sal$salario, INDEX=sal$sexo, FUN=mean)</code></pre>
+<pre><code>##        H        M 
+## 2675.133 1974.133</code></pre>
+<p>Vamos fazer o mesmo, mas agora com o desvio padrão.</p>
+<pre class="r"><code>tapply(X=sal$salario, INDEX=sal$sexo, FUN=sd)</code></pre>
+<pre><code>##        H        M 
+## 205.7888 220.8101</code></pre>
+<p>Vamos visualizar os dados em um gráfico:</p>
+<pre class="r"><code>plot(salario ~ sexo, data=sal)</code></pre>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>Note que o comando de gráfico <tt> plot </tt> aplicado à relação entre uma variável contínua e outra categórica resulta em um gráfico de boxplot.</p>
+<p>Vamos então construir o modelo linear entre as variáveis salário e sexo no R.</p>
+<pre class="r"><code>mod.sal &lt;-  lm(salario ~ sexo, data=sal)</code></pre>
+<p>Vamos verificar os parâmetros estimados pelo modelo com a função <tt> coef </tt>.</p>
+<pre class="r"><code>coef(mod.sal)</code></pre>
+<pre><code>## (Intercept)       sexoM 
+##    2675.133    -701.000</code></pre>
+<p>Neste caso, o valor do intercepto (<span class="math inline">\(\alpha\)</span>) equivale à media de salário dos homens prevista pelo modelo. A média de salário das mulheres é somatório do valor do intercepto e da inclinação (<span class="math inline">\(\beta\)</span>). Note que o valor negativo de <span class="math inline">\(\beta\)</span> representa que a previsão média de salário das mulheres é menor do que a dos homens.</p>
+<p>Vamos olhar o sumário do modelo linear:</p>
+<pre class="r"><code>summary(mod.sal)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = salario ~ sexo, data = sal)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -450.13 -138.63   -5.63  152.37  404.87 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  2675.13      38.97   68.65   &lt;2e-16 ***
+## sexoM        -701.00      55.11  -12.72   &lt;2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 213.4 on 58 degrees of freedom
+## Multiple R-squared:  0.7361, Adjusted R-squared:  0.7316 
+## F-statistic: 161.8 on 1 and 58 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div id="o-ajuste-do-modelo-aos-dados-1" class="section level3">
+<h3>O ajuste do modelo aos dados</h3>
+<p>Vamos agora usar a função <tt> predict </tt> para calcular os valores previstos pelo modelo. O mesmo método funciona quando temos uma variável preditora contínua. Porém, como no caso de uma preditora contínua temos facilmente a previsão do modelo com a função <tt> abline </tt> nós não usamos a função <tt> predict </tt>.</p>
+<pre class="r"><code># calculando os valores previstos pelo modelo
+previsto &lt;- predict(mod.sal, se.fit=TRUE)
+previsto</code></pre>
+<pre><code>## $fit
+##        1        2        3        4        5        6        7        8 
+## 2675.133 2675.133 2675.133 2675.133 2675.133 2675.133 2675.133 2675.133 
+##        9       10       11       12       13       14       15       16 
+## 2675.133 2675.133 2675.133 2675.133 2675.133 2675.133 2675.133 2675.133 
+##       17       18       19       20       21       22       23       24 
+## 2675.133 2675.133 2675.133 2675.133 2675.133 2675.133 2675.133 2675.133 
+##       25       26       27       28       29       30       31       32 
+## 2675.133 2675.133 2675.133 2675.133 2675.133 2675.133 1974.133 1974.133 
+##       33       34       35       36       37       38       39       40 
+## 1974.133 1974.133 1974.133 1974.133 1974.133 1974.133 1974.133 1974.133 
+##       41       42       43       44       45       46       47       48 
+## 1974.133 1974.133 1974.133 1974.133 1974.133 1974.133 1974.133 1974.133 
+##       49       50       51       52       53       54       55       56 
+## 1974.133 1974.133 1974.133 1974.133 1974.133 1974.133 1974.133 1974.133 
+##       57       58       59       60 
+## 1974.133 1974.133 1974.133 1974.133 
+## 
+## $se.fit
+##  [1] 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671
+##  [9] 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671
+## [17] 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671
+## [25] 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671
+## [33] 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671
+## [41] 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671
+## [49] 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671 38.9671
+## [57] 38.9671 38.9671 38.9671 38.9671
+## 
+## $df
+## [1] 58
+## 
+## $residual.scale
+## [1] 213.4316</code></pre>
+<p>Queremos selecionar apenas o valor médio de cada categoria e o erro padrão da estimativa.</p>
+<pre class="r"><code># gravando a media prevista pelo modelo para cada categoria em um objeto
+previsto.fit &lt;- previsto$fit
+# vamos usar a funcao tapply para calcular a media do previsto por categoria 
+## vamos gravar o resultado em um objeto
+med.prev &lt;- tapply(X=previsto.fit, INDEX=sal$sexo, FUN=mean)
+med.prev</code></pre>
+<pre><code>##        H        M 
+## 2675.133 1974.133</code></pre>
+<pre class="r"><code>## vamos guardar o valor do erro padrão estimado em um objeto
+se.prev &lt;-  mean(previsto$se.fit)
+se.prev</code></pre>
+<pre><code>## [1] 38.9671</code></pre>
+<p>Vamos criar os objetos com os valores observados da média e do erro padrão dos salários dos homens e mulheres. Já calculamos anteriormente a média e o desvio padrão, mas não salvamos em objetos. Agora vamos salvar e ao invés de calcular o desvio padrão, calcularemos o erro padrão.</p>
+<p>O erro padrão nada mais é do que o desvio padrão dividido pela raiz quadrada do número de observações.</p>
+<p>O desvio padrão é calculado como:</p>
+<p><span class="math display">\[ \sigma = \sqrt{\frac{\sum(x_{i} - \mu)^2}{n-1}}\]</span></p>
+<p>O erro padrão (SE) é:</p>
+<p><span class="math display">\[ SE = \frac{\sigma}{\sqrt{n}}\]</span></p>
+<p>No pacote básico do R não temos uma função para calcular o erro padrão. Mas é simples! Só precisamos dividir o resultado da funçao <tt> sd </tt> pela raiz quadrada do número de observações.</p>
+<pre class="r"><code># média de salário por categoria
+med.obs &lt;- tapply(X=sal$salario, INDEX=sal$sexo, FUN=mean)
+med.obs</code></pre>
+<pre><code>##        H        M 
+## 2675.133 1974.133</code></pre>
+<pre class="r"><code># desvio padrao observado
+sd.obs &lt;- tapply(X=sal$salario, INDEX=sal$sexo, FUN=sd)
+se.obs &lt;- sd.obs/sqrt(30) # temos 30 observações para cada sexo
+se.obs</code></pre>
+<pre><code>##        H        M 
+## 37.57172 40.31422</code></pre>
+</div>
+<div id="bonus" class="section level3">
+<h3>BÔNUS</h3>
+<center>
+<img src="figuras/bonus.jpg" style="width:30.0%" />
+</center>
+<p>Se uma função não existe no R, podemos criá-la! Para isso, usamos a função <tt> function </tt>. Vamos criar uma função para calcular o erro padrão no R.</p>
+<pre class="r"><code># criando a função
+se &lt;- function(x) {
+  sd(x)/sqrt(length(x))
+}</code></pre>
+<p>Vamos testar a função:</p>
+<pre class="r"><code>se(sal$salario)</code></pre>
+<pre><code>## [1] 53.18418</code></pre>
+<p>Vamos comparar com o cálculo na mão:</p>
+<pre class="r"><code>sd(sal$salario)/sqrt(length(sal$salario))</code></pre>
+<pre><code>## [1] 53.18418</code></pre>
+<p>Qual a vantagem? Usar apenas quatro caracteres s e ( )!</p>
+<p>Voltando ao gráfico…</p>
+<p>Agora vamos confrontar os valores observados com os esperados pelo modelo. O círculo amarelo e o segmento amarelo representam respectivamente a média e o erro padrão estimados pelo modelo.</p>
+<pre class="r"><code># grafico de barras com a media de salario por categoria
+barplot(med.obs, ylim=c(0,med.obs[1]+50), ylab=&quot;salário&quot;, xlab=&quot;sexo&quot;, 
+        col=c(&quot;tomato&quot;, &quot;navyblue&quot;))
+# plotando o erro padrão observado por categoria
+arrows(x0=c(.7,1.9), x1=c(.7,1.9), y0=med.obs, y1=med.obs+se.obs, length = .1, angle=90)
+# plotando a média esperada pelo modelo
+points(med.prev ~ c(.7, 1.9), pch=19, col=&quot;yellow&quot;)
+# plotando o erro padrão esperado por categoria
+arrows(x0=c(.7,1.9), x1=c(.7,1.9), y0=med.prev, y1=med.prev+se.prev, 
+       length = .1, angle=90, col=&quot;yellow&quot;)</code></pre>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-29-1.png" width="336" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="nem-tudo-na-vida-e-linear" class="section level2">
+<h2>3. Nem tudo na vida é linear</h2>
+<p>Imagine um cenário em que eu conheço bem meus dados, minha variável resposta segue uma distribuição normal, porém minha variável resposta não tem uma relação linear com a variável preditora. Vamos ver o que podemos fazer para encontrar um modelo que se ajuste bem a esse dado.</p>
+<p>Vamos tomar como exemplo um estudo que avaliou o efeito do distúrbio humano no estabelecimento de ninhos de pardal <em>Passer domesticus</em>. Observou-se que o grande número de pedestres nas proximidades do local de estabelecimento dos ninhos, acarretava uma diminuição na densidade dos pardais. Porém, locais com baixa circulação de pedestres tinham também um número baixo de pardais.</p>
+<center>
+<img src="figuras/sparrow.jpg" style="width:40.0%" />
+</center>
+<p><strong>Pergunta:</strong> A alta circulação de pedestres reduz o número de ninhos do pardal <em>Passer domesticus</em>?</p>
+<p><strong>Hipótese:</strong> Distúrbio causado pela alta quantidade de pedestres ao redor das áreas de nidificação do pardal, causa a redução no número de ninhos, porém uma circulação moderada de pessoas não diminui a densidade dos pardais.</p>
+<p><strong>Previsão:</strong></p>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p>Vamos ler o conjunto de dados e testar a hipótese.</p>
+<pre class="r"><code># lendo os dados no R
+pardal &lt;- read.csv(&quot;dados/pardal.csv&quot;)</code></pre>
+<p>Vamos inpecionar os dados:</p>
+<pre class="r"><code># seis primeiras linhas
+head(pardal)</code></pre>
+<pre><code>##   pedestres pardal
+## 1       0.0  10.40
+## 2       0.2  83.98
+## 3       0.4  25.57
+## 4       0.6 155.44
+## 5       0.8  39.79
+## 6       1.0 108.65</code></pre>
+<pre class="r"><code># sumario dos dados
+summary(pardal)</code></pre>
+<pre><code>##    pedestres      pardal     
+##  Min.   : 0   Min.   :  0.0  
+##  1st Qu.:10   1st Qu.:114.0  
+##  Median :20   Median :172.4  
+##  Mean   :20   Mean   :161.1  
+##  3rd Qu.:30   3rd Qu.:216.0  
+##  Max.   :40   Max.   :300.0</code></pre>
+<p>Vamos olhar para a distribuição dos dados de densidade do pardal em um histograma.</p>
+<pre class="r"><code># histograma da densiadade do pardal
+hist(pardal$pardal)</code></pre>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p>Vamos então olhar para a relação entre as duas variáveis.</p>
+<pre class="r"><code>plot(pardal ~ pedestres, data=pardal, 
+     xlab=&quot;N pedestres por hectare min&quot;,
+     ylab=&quot;Densidade de pardais por hectare&quot;)</code></pre>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p>Como podemos modelar essa relação? Faremos isso usando um polinômio de segundo grau: <span class="math inline">\(x + x^2\)</span>.</p>
+<p>Como seria a notação desse modelo?</p>
+<p><span class="math display">\[Y = \alpha + \beta_{1}X + \beta_{2}X^2\]</span></p>
+<p>Agora nossa variável preditora número de pedestres, assume uma forma de polinômio de segundo grau. Vamos modelar isso no R usando a função I que faz simplesmente forçar a notação matemática que estamos estabelecendo.</p>
+<pre class="r"><code>mod.par &lt;- lm(pardal ~ pedestres + I(pedestres^2), data=pardal)</code></pre>
+<p>Vamos olhar para os coeficientes do modelo usando a função <tt> coef </tt>.</p>
+<pre class="r"><code># guardando os coeficientes do modelo em um objeto
+coef.par &lt;- coef(mod.par)
+coef.par</code></pre>
+<pre><code>##    (Intercept)      pedestres I(pedestres^2) 
+##     48.6084885     17.5276798     -0.4452299</code></pre>
+<p>E agora vamos olhar para o sumário dos modelo. Atente para o valor da estimativa dos parâmetros e do erro estimado. Estamos mais preocupados com a intensidade do efeito do que com o valor de p. :P</p>
+<pre class="r"><code># olhando o sumario do modelo
+summary(mod.par)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = pardal ~ pedestres + I(pedestres^2), data = pardal)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -104.363  -25.881    1.937   23.581  114.481 
+## 
+## Coefficients:
+##                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)    48.60849    8.30469   5.853 1.97e-08 ***
+## pedestres      17.52768    0.95924  18.272  &lt; 2e-16 ***
+## I(pedestres^2) -0.44523    0.02321 -19.181  &lt; 2e-16 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 39.64 on 198 degrees of freedom
+## Multiple R-squared:  0.651,  Adjusted R-squared:  0.6474 
+## F-statistic: 184.6 on 2 and 198 DF,  p-value: &lt; 2.2e-16</code></pre>
+<div id="o-ajuste-do-modelo-aos-dados-2" class="section level3">
+<h3>O ajuste do modelo aos dados</h3>
+<pre class="r"><code># plotando os dados
+plot(pardal ~ pedestres, data=pardal, las=1, bty=&quot;l&quot;, 
+     xlab=&quot;N pedestres por hectare min&quot;,
+     ylab=&quot;Densidade de pardais por hectare&quot;)
+# usando a funcao curve para plotar o previsto pelo modelo no formato de polinomio
+## a + bx + cx^2
+curve(coef.par[1] + coef.par[2]*x + coef.par[3]*x^2, add=TRUE, lwd=2)</code></pre>
+<p><img src="pratica2_regressao_linear_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
